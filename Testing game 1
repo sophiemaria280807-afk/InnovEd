@@ -1,0 +1,144 @@
+import random
+
+class Player:
+    def __init__(self):
+        self.money = 0
+        self.skill = 0
+        self.happiness = 50
+
+    def apply_effects(self, effects):
+        for stat, value in effects.items():
+            setattr(self, stat, getattr(self, stat) + value)
+
+    def show_stats(self):
+        print("\n--- YOUR STATS ---")
+        print(f"Money: {self.money}")
+        print(f"Skill: {self.skill}")
+        print(f"Happiness: {self.happiness}")
+
+
+careers = [
+    {
+        "name": "Doctor",
+        "description": "Helps patients, high skill, stressful job, long years of school.",
+        "advantages": ["High salary", "Respected"],
+        "disadvantages": ["Long hours", "Stressful","Exposed to dangerous virus","Risky"],
+        "scenario": {
+            "question": "A patient has a fever. What do you do?",
+            "choices": {
+                "1": ("Treat properly", {"skill": 5, "happiness": -2}),
+                "2": ("Ignore", {"happiness": -5}),
+            },
+        },
+    },
+    {
+        "name": "Developer",
+        "description": "Builds software and apps.",
+        "advantages": ["Good pay", "Remote work"],
+        "disadvantages": ["Sitting long hours", "Deterioration of health", "Having to catch up to new technologies"],
+        "scenario": {
+            "question": "Your code has a bug.",
+            "choices": {
+                "1": ("Debug it", {"skill": 5}),
+                "2": ("Copy code online", {"money": 3, "skill": -2}),
+            },
+        },
+    },
+    {
+        "name": "Designer",
+        "description": "Creates visuals and designs.",
+        "advantages": ["Creative freedom","Have your own choice"],
+        "disadvantages": ["Client pressure","Having to keep up with trends"],
+        "scenario": {
+            "question": "Client wants a logo urgently.",
+            "choices": {
+                "1": ("Make original design", {"skill": 4}),
+                "2": ("Use template", {"money": 3}),
+            },
+        },
+    },
+]
+
+
+events = [
+    ("You got promoted!", {"money": 5}),
+    ("You're feeling stressed...", {"happiness": -5}),
+    ("You learned something new!", {"skill": 5}),
+]
+
+
+def show_career_info(career):
+    print(f"\n--- {career['name']} ---")
+    print(career["description"])
+
+    print("\nAdvantages:")
+    for adv in career["advantages"]:
+        print("-", adv)
+
+    print("\nDisadvantages:")
+    for dis in career["disadvantages"]:
+        print("-", dis)
+
+
+def play_scenario(player, career):
+    s = career["scenario"]
+
+    print("\nScenario:")
+    print(s["question"])
+
+    for key, (text, _) in s["choices"].items():
+        print(f"{key}: {text}")
+
+    choice = input("Choose: ")
+
+    if choice in s["choices"]:
+        effects = s["choices"][choice][1]
+        player.apply_effects(effects)
+    else:
+        print("Invalid choice!")
+
+
+def random_event(player):
+    event = random.choice(events)
+    print("\nEVENT:", event[0])
+    player.apply_effects(event[1])
+
+
+# main program
+def game():
+    player = Player()
+
+    while True:
+        print("\n=== CAREER STANDS ===")
+        for i, career in enumerate(careers, 1):
+            print(f"{i}. {career['name']}")
+
+        print("0. Exit")
+
+        choice = input("Walk to a stand: ")
+
+        if choice == "0":
+            break
+
+        if not choice.isdigit() or int(choice) > len(careers):
+            print("Invalid choice.")
+            continue
+
+        career = careers[int(choice) - 1]
+
+        print("\nNPC: What would you like to do?")
+        print("1. View info")
+        print("2. Try scenario")
+
+        action = input("Choose: ")
+
+        if action == "1":
+            show_career_info(career)
+        elif action == "2":
+            play_scenario(player, career)
+            random_event(player)
+
+        player.show_stats()
+
+
+game()
