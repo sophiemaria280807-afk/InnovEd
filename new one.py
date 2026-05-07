@@ -282,6 +282,14 @@ def draw_popup(career, stage):
         draw_text("2: " + career["scenario"]["choices"][pygame.K_2][0],
                   popup_rect.x + 20, popup_rect.y + 140)
 
+def get_rect(career):
+    return pygame.Rect(
+        career["x"],
+        career["y"],
+        BUILDING_WIDTH,
+        BUILDING_HEIGHT
+    )
+
 # ----------------------------
 # GAME
 # ----------------------------
@@ -292,6 +300,8 @@ def game():
     current_career = None
     popup_active = False
     stage = None  # "ask" or "scenario"
+
+    visited = set() 
 
     while running:
         dt = clock.tick(60) / 1000
@@ -314,6 +324,8 @@ def game():
                     elif event.key == pygame.K_2:
                         popup_active = False
                         current_career = None
+                        
+                        visited.clear() 
 
                 elif stage == "scenario":
 
@@ -326,6 +338,8 @@ def game():
 
                         popup_active = False
                         current_career = None
+
+                        visited.clear() 
 
             # CLOSE POPUP manually
             if event.type == pygame.KEYDOWN:
@@ -352,12 +366,27 @@ def game():
         # ----------------------------
         # COLLISION DETECTION
         # ----------------------------
-        if not popup_active:
-            for career in careers:
-                if player_rect.colliderect(get_building_rect(career)):
-                    current_career = career
-                    popup_active = True
-                    stage = "ask"
+        # ----------------------------
+# COLLISION DETECTION (FIXED)
+# ----------------------------
+    if not popup_active:
+
+        for career in careers:
+
+            rect = get_building_rect(career)
+
+        if player_rect.colliderect(rect):
+
+            # ⭐ ONLY TRIGGER IF NOT ALREADY VISITING
+            if career["name"] not in visited:
+
+                current_career = career
+                popup_active = True
+                stage = "ask"
+
+                visited.add(career["name"])
+            
+                           
 
         # bounds
         player.pos.x = max(10, min(SCREEN_WIDTH - 10, player.pos.x))
