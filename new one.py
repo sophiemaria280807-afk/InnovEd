@@ -325,7 +325,7 @@ def game():
                         popup_active = False
                         current_career = None
                         
-                        visited.clear() 
+                        
 
                 elif stage == "scenario":
 
@@ -339,7 +339,7 @@ def game():
                         popup_active = False
                         current_career = None
 
-                        visited.clear() 
+                         
 
             # CLOSE POPUP manually
             if event.type == pygame.KEYDOWN:
@@ -367,24 +367,25 @@ def game():
         # COLLISION DETECTION
         # ----------------------------
         # ----------------------------
-# COLLISION DETECTION (FIXED)
-# ----------------------------
-    if not popup_active:
+        # ----------------------------
+        # COLLISION DETECTION
+        # ----------------------------
+        if not popup_active:
 
-        for career in careers:
+            for career in careers:
 
-            rect = get_building_rect(career)
+                rect = get_building_rect(career)
 
-        if player_rect.colliderect(rect):
+                if player_rect.colliderect(rect):
 
-            # ⭐ ONLY TRIGGER IF NOT ALREADY VISITING
-            if career["name"] not in visited:
+                    # ONLY TRIGGER IF NOT ALREADY VISITING
+                    if career["name"] not in visited:
 
-                current_career = career
-                popup_active = True
-                stage = "ask"
+                        current_career = career
+                        popup_active = True
+                        stage = "ask"
 
-                visited.add(career["name"])
+                        visited.add(career["name"])
             
                            
 
