@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.10" tiledversion="1.12.1" orientation="orthogonal" renderorder="right-down" width="25" height="20" tilewidth="16" tileheight="16" infinite="0" nextlayerid="5" nextobjectid="43">
+ <tileset firstgid="1" name="Ground" tilewidth="16" tileheight="16" spacing="1" margin="1" tilecount="49" columns="7">
+  <image source="../tileset/bg.png" width="128" height="128"/>
+ </tileset>
+ <tileset firstgid="50" source="../tileset/Trees.tsx"/>
+ <layer id="1" name="Tile Layer 1" width="25" height="20">
+  <data encoding="csv">
+6,6,6,6,6,6,1,2,2,2,2,2,2,3,6,6,6,6,6,6,6,6,6,6,6,
+6,1,2,2,2,3,8,9,9,9,9,9,9,10,6,6,6,6,6,6,6,6,6,6,6,
+6,8,9,9,9,10,8,9,9,9,9,9,9,10,6,6,6,6,6,6,6,6,6,6,6,
+6,8,9,9,9,5,4,9,9,9,9,9,9,10,6,6,1,2,3,6,6,6,6,6,6,
+6,8,9,9,9,9,9,9,9,9,9,9,9,5,2,2,9,9,10,6,6,6,6,6,6,
+6,8,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,2,2,3,6,6,6,
+6,8,9,9,9,9,12,11,9,9,9,9,9,9,9,9,9,9,9,9,9,5,3,6,6,
+6,8,9,9,9,9,5,4,9,9,9,9,9,9,9,9,9,9,9,9,9,9,10,6,6,
+1,4,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,10,6,6,
+8,9,9,9,9,12,11,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,10,6,6,
+8,9,9,9,9,10,15,11,9,9,9,9,9,9,9,9,9,9,9,9,9,9,10,6,6,
+8,9,9,9,12,17,6,15,11,9,9,9,9,9,9,9,9,9,9,9,9,9,10,6,6,
+8,9,9,9,5,2,2,2,4,9,9,9,9,9,9,9,9,9,9,9,9,9,10,6,6,
+8,9,9,9,9,9,9,9,9,9,9,9,9,9,12,11,9,9,9,9,9,9,10,6,6,
+8,9,9,9,9,9,9,9,9,9,9,9,9,9,10,8,9,9,9,9,9,12,17,6,6,
+8,9,9,9,9,9,9,9,9,9,9,9,9,9,5,4,9,9,9,9,9,10,6,6,6,
+8,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,10,6,6,6,
+15,16,16,16,16,11,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,10,6,6,6,
+6,6,6,6,6,15,16,11,9,9,9,9,9,9,9,12,16,16,16,16,16,17,6,6,6,
+6,6,6,6,6,6,6,15,16,16,16,16,16,16,16,17,6,6,6,6,6,6,6,6,6
+</data>
+ </layer>
+ <objectgroup id="3" name="Object Layer 1">
+  <object id="1" name="Stands" gid="51" x="-7" y="153.5" width="128" height="128"/>
+  <object id="2" name="Stands" gid="51" x="69" y="134.5" width="128" height="128"/>
+  <object id="3" name="Stands" gid="51" x="136.5" y="294" width="128" height="128"/>
+  <object id="4" name="Stands" gid="51" x="34.5" y="326.5" width="128" height="128"/>
+  <object id="5" name="Stands" gid="51" x="262.5" y="174.5" width="128" height="128"/>
+  <object id="6" name="Stands" gid="51" x="184.5" y="134.5" width="128" height="128"/>
+  <object id="7" name="Stands" gid="51" x="-22" y="281" width="128" height="128"/>
+  <object id="8" name="Stands" gid="51" x="88" y="327.5" width="128" height="128"/>
+  <object id="9" name="Stands" gid="51" x="122.5" y="134.5" width="128" height="128"/>
+  <object id="10" name="BigTree" gid="50" x="270" y="126" width="128" height="128"/>
+  <object id="13" name="Stands" gid="51" x="188" y="294" width="128" height="128"/>
+  <object id="14" name="Stands" gid="51" x="-22" y="384" width="128" height="128"/>
+  <object id="15" name="Stands" gid="51" x="254" y="358.5" width="128" height="128"/>
+  <object id="16" name="Stands" gid="51" x="311.5" y="175" width="128" height="128"/>
+  <object id="17" name="BigTree" gid="50" x="293.5" y="133" width="128" height="128"/>
+  <object id="18" name="BigTree" gid="50" x="294.5" y="107" width="128" height="128"/>
+  <object id="19" name="BigTree" gid="50" x="337" y="329" width="128" height="128"/>
+  <object id="20" name="BigTree" gid="50" x="70" y="275" width="128" height="128"/>
+  <object id="21" name="BigTree" gid="50" x="-15" y="210" width="128" height="128"/>
+  <object id="22" name="BigTree" gid="50" x="-14.5" y="182.5" width="128" height="128"/>
+  <object id="23" name="BigTree" gid="50" x="-16.5" y="142" width="128" height="128"/>
+  <object id="24" name="BigTree" gid="50" x="-10.5" y="104.5" width="128" height="128"/>
+  <object id="33" name="BigTree" gid="50" x="315.5" y="126" width="128" height="128"/>
+  <object id="34" name="BigTree" gid="50" x="332" y="140.5" width="128" height="128"/>
+  <object id="35" name="BigTree" gid="50" x="366.5" y="145.5" width="128" height="128"/>
+  <object id="36" name="BigTree" gid="50" x="349.5" y="110.5" width="128" height="128"/>
+  <object id="37" name="BigTree" gid="50" x="330" y="101.5" width="128" height="128"/>
+  <object id="38" name="BigTree" gid="50" x="375" y="120.5" width="128" height="128"/>
+  <object id="39" name="BigTree" gid="50" x="368.5" y="322" width="128" height="128"/>
+  <object id="40" name="BigTree" gid="50" x="381.5" y="288.5" width="128" height="128"/>
+  <object id="41" name="BigTree" gid="50" x="379" y="250" width="128" height="128"/>
+ </objectgroup>
+ <objectgroup id="4" name="Object Layer 2">
+  <object id="27" name="SmallTree" gid="52" x="259.5" y="313" width="128" height="128"/>
+  <object id="28" name="SmallTree" gid="52" x="4" y="242.5" width="128" height="128"/>
+  <object id="29" name="SmallTree" gid="52" x="-15" y="102.5" width="128" height="128"/>
+  <object id="30" name="SmallTree" gid="52" x="246" y="326" width="128" height="128"/>
+  <object id="31" name="SmallTree" gid="52" x="-77" y="66.5" width="128" height="128"/>
+  <object id="32" name="SmallTree" gid="52" x="-106.5" y="196" width="128" height="128"/>
+  <object id="42" name="SmallTree" gid="52" x="-104" y="343" width="128" height="128"/>
+ </objectgroup>
+</map>

@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.10" tiledversion="1.12.1" orientation="orthogonal" renderorder="right-down" width="25" height="20" tilewidth="16" tileheight="16" infinite="0" nextlayerid="6" nextobjectid="104">
+ <tileset firstgid="1" name="Ground" tilewidth="16" tileheight="16" spacing="1" margin="1" tilecount="49" columns="7">
+  <image source="../tileset/bg.png" width="128" height="128"/>
+ </tileset>
+ <tileset firstgid="50" source="../tileset/Trees.tsx"/>
+ <layer id="1" name="Tile Layer 1" width="25" height="20">
+  <data encoding="csv">
+6,6,6,6,6,6,1,2,2,2,2,2,2,3,6,6,6,6,6,6,6,6,6,6,6,
+6,1,2,2,2,3,8,9,9,9,9,9,9,10,6,6,6,6,6,6,6,6,6,6,6,
+6,8,9,9,9,10,8,9,9,9,9,9,9,10,6,6,6,6,6,6,6,6,6,6,6,
+6,8,9,9,9,5,4,9,9,9,9,9,9,10,6,6,1,2,3,6,6,6,6,6,6,
+6,8,9,9,9,9,9,9,9,9,9,9,9,5,2,2,9,9,10,6,6,6,6,6,6,
+6,8,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,2,2,3,6,6,6,
+6,8,9,9,9,9,12,11,9,9,9,9,9,9,9,9,9,9,9,9,9,5,3,6,6,
+6,8,9,9,9,9,5,4,9,9,9,9,9,9,9,9,9,9,9,9,9,9,10,6,6,
+1,4,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,10,6,6,
+8,9,9,9,9,12,11,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,10,6,6,
+8,9,9,9,9,10,15,11,9,9,9,9,9,9,9,9,9,9,9,9,9,9,10,6,6,
+8,9,9,9,12,17,6,15,11,9,9,9,9,9,9,9,9,9,9,9,9,9,10,6,6,
+8,9,9,9,5,2,2,2,4,9,9,9,9,9,9,9,9,9,9,9,9,9,10,6,6,
+8,9,9,9,9,9,9,9,9,9,9,9,9,9,12,11,9,9,9,9,9,9,10,6,6,
+8,9,9,9,9,9,9,9,9,9,9,9,9,9,10,8,9,9,9,9,9,12,17,6,6,
+8,9,9,9,9,9,9,9,9,9,9,9,9,9,5,4,9,9,9,9,9,10,6,6,6,
+8,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,10,6,6,6,
+15,16,16,16,16,11,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,10,6,6,6,
+6,6,6,6,6,15,16,11,9,9,9,9,9,9,9,12,16,16,16,16,16,17,6,6,6,
+6,6,6,6,6,6,6,15,16,16,16,16,16,16,16,17,6,6,6,6,6,6,6,6,6
+</data>
+ </layer>
+ <objectgroup id="3" name="Object1">
+  <object id="69" gid="53" x="373.5" y="82.5" width="38" height="51"/>
+  <object id="70" gid="53" x="355.5" y="101" width="38" height="51"/>
+  <object id="71" gid="53" x="376" y="52.5" width="38" height="51"/>
+  <object id="72" gid="53" x="219.5" y="25.5" width="38" height="51"/>
+  <object id="73" gid="53" x="241.5" y="45" width="38" height="51"/>
+  <object id="74" gid="53" x="270.5" y="35.5" width="38" height="51"/>
+  <object id="75" gid="53" x="284" y="55" width="38" height="51"/>
+  <object id="76" gid="53" x="302" y="38" width="38" height="51"/>
+  <object id="77" gid="53" x="304.5" y="52" width="38" height="51"/>
+  <object id="78" gid="53" x="329.5" y="54.5" width="38" height="51"/>
+  <object id="79" gid="53" x="341" y="78.5" width="38" height="51"/>
+  <object id="80" gid="53" x="360" y="52" width="38" height="51"/>
+  <object id="81" gid="53" x="329" y="29.5" width="38" height="51"/>
+  <object id="87" gid="53" x="-13.5" y="37" width="38" height="51"/>
+  <object id="82" gid="53" x="356" y="30" width="38" height="51"/>
+  <object id="83" gid="53" x="377.5" y="124.5" width="38" height="51"/>
+  <object id="85" gid="53" x="380.5" y="247" width="38" height="51"/>
+  <object id="84" gid="53" x="364.5" y="287" width="38" height="51"/>
+  <object id="86" gid="53" x="369" y="262.5" width="38" height="51"/>
+  <object id="90" gid="53" x="-11.5" y="63.5" width="38" height="51"/>
+  <object id="89" gid="53" x="-13.5" y="91" width="38" height="51"/>
+  <object id="88" gid="53" x="-13.5" y="122" width="38" height="51"/>
+  <object id="91" gid="53" x="49" y="15.5" width="38" height="51"/>
+  <object id="93" gid="53" x="384.5" y="294.5" width="38" height="51"/>
+  <object id="92" gid="53" x="371" y="328" width="38" height="51"/>
+  <object id="94" gid="53" x="75.5" y="203.5" width="38" height="51"/>
+ </objectgroup>
+ <objectgroup id="4" name="Object2">
+  <object id="96" gid="55" x="81" y="47.5" width="28" height="46"/>
+  <object id="97" gid="55" x="33" y="22.5" width="28" height="46"/>
+  <object id="98" gid="55" x="16" y="26" width="28" height="46"/>
+  <object id="99" gid="55" x="269" y="55" width="28" height="46"/>
+  <object id="100" gid="55" x="360" y="129.5" width="28" height="46"/>
+  <object id="101" gid="55" x="343.5" y="279.5" width="28" height="46"/>
+  <object id="102" gid="55" x="-8" y="304" width="28" height="46"/>
+  <object id="103" gid="55" x="102" y="206" width="28" height="46"/>
+ </objectgroup>
+ <objectgroup id="5" name="Stands">
+  <object id="56" gid="54" x="27" y="57.5" width="51" height="33"/>
+  <object id="57" gid="54" x="109.5" y="41.5" width="51" height="33"/>
+  <object id="58" gid="54" x="160" y="41.5" width="51" height="33"/>
+  <object id="59" gid="54" x="16" y="198.5" width="51" height="33"/>
+  <object id="60" gid="54" x="75" y="231" width="51" height="33"/>
+  <object id="61" gid="54" x="125.5" y="231.5" width="51" height="33"/>
+  <object id="62" gid="54" x="16" y="297.5" width="51" height="33"/>
+  <object id="63" gid="54" x="220" y="56" width="51" height="33"/>
+  <object id="64" gid="54" x="303" y="80.5" width="51" height="33"/>
+  <object id="65" gid="54" x="294" y="272.5" width="51" height="33"/>
+  <object id="66" gid="54" x="243" y="273.5" width="51" height="33"/>
+  <object id="67" gid="54" x="173.5" y="198.5" width="51" height="33"/>
+ </objectgroup>
+</map>
