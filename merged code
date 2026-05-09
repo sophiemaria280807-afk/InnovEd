@@ -1,0 +1,385 @@
+import pygame
+import random
+
+# ----------------------------
+# SETTINGS
+# ----------------------------
+WINDOW_WIDTH = 800
+WINDOW_HEIGHT = 600
+
+pygame.init()
+
+# ----------------------------
+# CAREERS
+# ----------------------------
+careers = [
+    {
+        "name": "Doctor",
+        "x": 80, "y": 60,
+        "color": (255,100,100),
+        "scenario": {
+            "question": "Patient has fever",
+            "choices": {
+                pygame.K_1: ("Treat properly", {"skill": 5, "happiness": -2}),
+                pygame.K_2: ("Ignore", {"happiness": -5}),
+            }
+        }
+    },
+    {
+        "name": "Developer",
+        "x": 240, "y": 40,
+        "color": (100, 255, 100),
+        "scenario": {
+            "question": "Code has bug",
+            "choices": {
+                pygame.K_1: ("Debug it", {"skill": 5}),
+                pygame.K_2: ("Copy online", {"money": 3}),
+            }
+        }
+    },
+    {
+        "name": "Designer",
+        "x": 450, "y": 60,
+        "color": (100,100,255),
+        "scenario": {
+            "question": "Client wants logo urgently",
+            "choices": {
+                pygame.K_1: ("Original design", {"skill": 4}),
+                pygame.K_2: ("Use template", {"money": 3}),
+            }
+        }
+    },
+        {
+        "name": "Chef",
+    "x": 50,
+    "y": 350,
+    "color": (255, 140, 0),
+    "scenario": {
+        "question": "Customer says food is cold",
+        "choices": {
+            pygame.K_1: ("Cook again carefully", {"skill": 4, "happiness": -1}),
+            pygame.K_2: ("Ignore complaint", {"money": 2, "happiness": -5}),
+        },
+    },
+},
+
+{
+    "name": "Teacher",
+    "x": 160,
+    "y": 420,
+    "color": (255, 255, 100),
+    "scenario": {
+        "question": "Student needs help after class",
+        "choices": {
+            pygame.K_1: ("Help student", {"skill": 3, "happiness": 3}),
+            pygame.K_2: ("Leave early", {"happiness": -2}),
+        },
+    },
+},
+
+{
+    "name": "Pilot",
+    "x": 650,
+    "y": 100,
+    "color": (100, 200, 255),
+    "scenario": {
+        "question": "Bad weather during flight",
+        "choices": {
+            pygame.K_1: ("Land safely", {"skill": 5}),
+            pygame.K_2: ("Rush landing", {"money": 3, "happiness": -4}),
+        },
+    },
+},
+
+{
+    "name": "Lawyer",
+    "x": 230,
+    "y": 420,
+    "color": (180, 100, 255),
+    "scenario": {
+        "question": "Client offers bribe",
+        "choices": {
+            pygame.K_1: ("Reject bribe", {"skill": 4, "happiness": 2}),
+            pygame.K_2: ("Accept bribe", {"money": 8, "happiness": -6}),
+        },
+    },
+},
+
+{
+    "name": "YouTuber",
+    "x": 500,
+    "y": 500,
+    "color": (255, 50, 50),
+    "scenario": {
+        "question": "Video is getting attention",
+        "choices": {
+            pygame.K_1: ("Upload quality content", {"skill": 4, "money": 5}),
+            pygame.K_2: ("Make clickbait", {"money": 8, "happiness": -3}),
+        },
+    },
+},
+
+{
+    "name": "Game Dev",
+    "x": 570,
+    "y": 500,
+    "color": (100, 255, 180),
+    "scenario": {
+        "question": "Game has many bugs before release",
+        "choices": {
+            pygame.K_1: ("Delay release and fix bugs", {"skill": 5}),
+            pygame.K_2: ("Release unfinished game", {"money": 6, "happiness": -4}),
+        },
+    },
+},
+
+{
+    "name": "Scientist",
+    "x": 350,
+    "y": 350,
+    "color": (150, 255, 255),
+    "scenario": {
+        "question": "Experiment failed",
+        "choices": {
+            pygame.K_1: ("Try again carefully", {"skill": 5}),
+            pygame.K_2: ("Fake results", {"money": 4, "happiness": -7}),
+        },
+    },
+},
+
+{
+    "name": "Athlete",
+    "x": 50,
+    "y": 520,
+    "color": (255, 255, 255),
+    "scenario": {
+        "question": "Big championship tomorrow",
+        "choices": {
+            pygame.K_1: ("Train hard", {"skill": 5, "happiness": -2}),
+            pygame.K_2: ("Skip practice", {"happiness": 2, "skill": -3}),
+        },
+    },
+},
+
+{
+    "name": "Photographer",
+    "x": 420,
+    "y": 350,
+    "color": (200, 200, 200),
+    "scenario": {
+        "question": "Client wants edits quickly",
+        "choices": {
+            pygame.K_1: ("Edit professionally", {"skill": 4}),
+            pygame.K_2: ("Rush edits", {"money": 4, "happiness": -2}),
+        },
+    },
+},
+
+{
+    "name": "Entrepreneur",
+    "x": 310,
+    "y": 40,
+    "color": (255, 215, 0),
+    "scenario": {
+        "question": "Business losing money",
+        "choices": {
+            pygame.K_1: ("Improve strategy", {"skill": 5}),
+            pygame.K_2: ("Fire workers", {"money": 7, "happiness": -5}),
+        }
+    }
+}
+]
+
+# ----------------------------
+# PLAYER
+# ----------------------------
+class Player(pygame.sprite.Sprite):
+    def __init__(self, pos, groups):
+        super().__init__(groups)
+
+        self.image = pygame.Surface((30, 30))
+        self.image.fill((255, 255, 0))
+
+        self.rect = self.image.get_rect(center=pos)
+        self.pos = pygame.Vector2(pos)
+        self.speed = 220
+
+        # stats
+        self.money = 0
+        self.skill = 0
+        self.happiness = 50
+
+    def update(self, dt):
+        keys = pygame.key.get_pressed()
+
+        move = pygame.Vector2(0, 0)
+
+        if keys[pygame.K_w]:
+            move.y = -1
+        if keys[pygame.K_s]:
+            move.y = 1
+        if keys[pygame.K_a]:
+            move.x = -1
+        if keys[pygame.K_d]:
+            move.x = 1
+
+        if move.length() > 0:
+            move = move.normalize()
+
+        self.pos += move * self.speed * dt
+        self.rect.center = self.pos
+
+# ----------------------------
+# GAME
+# ----------------------------
+class Game:
+    def __init__(self):
+        self.screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
+        pygame.display.set_caption("Pathnova")
+
+        self.clock = pygame.time.Clock()
+        self.running = True
+
+        self.all_sprites = pygame.sprite.Group()
+        self.player = Player((450, 360), self.all_sprites)
+
+        self.font = pygame.font.SysFont(None, 24)
+
+        # GAME STATE
+        self.state = "menu"
+
+        # POPUP SYSTEM
+        self.popup_active = False
+        self.current_career = None
+        self.stage = None
+        self.visited = set()
+
+    # ----------------------------
+    def draw_text(self, text, x, y, color=(255,255,255)):
+        img = self.font.render(text, True, color)
+        self.screen.blit(img, (x, y))
+
+    # ----------------------------
+    def apply_effects(self, effects):
+        for stat, value in effects.items():
+            setattr(self.player, stat, getattr(self.player, stat) + value)
+
+    # ----------------------------
+    def run(self):
+        while self.running:
+            dt = self.clock.tick(60) / 1000
+
+            # ----------------------------
+            # EVENTS
+            # ----------------------------
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    self.running = False
+
+                # MENU
+                if self.state == "menu":
+                    if event.type == pygame.KEYDOWN:
+                        if event.key == pygame.K_1:
+                            self.state = "game"
+
+                # POPUP
+                if self.state == "game" and self.popup_active:
+
+                    if event.type == pygame.KEYDOWN:
+
+                        if self.stage == "ask":
+                            if event.key == pygame.K_1:
+                                self.stage = "scenario"
+                            elif event.key == pygame.K_2:
+                                self.popup_active = False
+                                self.current_career = None
+
+                        elif self.stage == "scenario":
+                            choices = self.current_career["scenario"]["choices"]
+
+                            if event.key in choices:
+                                _, effects = choices[event.key]
+                                self.apply_effects(effects)
+
+                                self.popup_active = False
+                                self.current_career = None
+
+            # ----------------------------
+            # UPDATE
+            # ----------------------------
+            if self.state == "game" and not self.popup_active:
+                self.all_sprites.update(dt)
+
+            # ----------------------------
+            # COLLISION
+            # ----------------------------
+            if self.state == "game" and not self.popup_active:
+
+                for c in careers:
+                    rect = pygame.Rect(c["x"], c["y"], 90, 60)
+
+                    if self.player.rect.colliderect(rect):
+                        if c["name"] not in self.visited:
+                            self.current_career = c
+                            self.popup_active = True
+                            self.stage = "ask"
+                            self.visited.add(c["name"])
+
+            # ----------------------------
+            # DRAW
+            # ----------------------------
+
+            # MENU SCREEN
+            if self.state == "menu":
+                self.screen.fill((30,30,40))
+                self.draw_text("PATHNOVA", 380, 200)
+                self.draw_text("1 - Start Game", 360, 300)
+                self.draw_text("Options (coming soon)", 330, 340)
+
+                pygame.display.update()
+                continue
+
+            # GAME SCREEN
+            self.screen.fill((40,40,60))
+
+            self.all_sprites.draw(self.screen)
+
+            # CAREERS
+            for c in careers:
+                rect = pygame.Rect(c["x"], c["y"], 90, 60)
+                pygame.draw.rect(self.screen, c["color"], rect)
+                pygame.draw.rect(self.screen, (255,255,255), rect, 2)
+                self.draw_text(c["name"], c["x"], c["y"]-20)
+
+            # STATS
+            self.draw_text(f"Money: {self.player.money}", 10, 10)
+            self.draw_text(f"Skill: {self.player.skill}", 10, 30)
+            self.draw_text(f"Happiness: {self.player.happiness}", 10, 50)
+
+            # POPUP
+            if self.popup_active and self.current_career:
+
+                pygame.draw.rect(self.screen, (20,20,30), (250,200,400,200))
+                pygame.draw.rect(self.screen, (255,255,255), (250,200,400,200), 2)
+
+                if self.stage == "ask":
+                    self.draw_text("Interested in this job?", 270, 240)
+                    self.draw_text("1 = Yes", 270, 280)
+                    self.draw_text("2 = No", 270, 310)
+
+                elif self.stage == "scenario":
+                    c = self.current_career
+
+                    self.draw_text(c["name"], 270, 220)
+                    self.draw_text(c["scenario"]["question"], 270, 250)
+
+                    self.draw_text("1: " + c["scenario"]["choices"][pygame.K_1][0], 270, 290)
+                    self.draw_text("2: " + c["scenario"]["choices"][pygame.K_2][0], 270, 320)
+
+            pygame.display.update()
+
+        pygame.quit()
+
+
+# ----------------------------
+Game().run()
