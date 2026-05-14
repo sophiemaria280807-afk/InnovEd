@@ -7,6 +7,7 @@ from buttons import Button
 from pytmx.util_pygame import load_pygame
 from os.path import join
 from career import careers
+import random
 
 
 class Game:
@@ -19,6 +20,8 @@ class Game:
         self.clock = pygame.time.Clock()
         self.running = True
         self.state = 'menu'
+        self.previous_state = 'game'
+        self.paused = False
         self.font_path = join('..','data','font.ttf')
         
 
@@ -48,6 +51,10 @@ class Game:
         self.result_popup = False
         self.result_text = ""
         self.result_start_time = 0
+
+        # question delay system
+        self.question_delay = 3000  # 3 seconds
+        self.question_start_time = 0
     
     def get_font(self,size): 
         return pygame.font.Font(self.font_path,size)
@@ -92,24 +99,28 @@ class Game:
             else:
                 self.result_popup = False
         
-    def controls(self):
+    def credits(self):
         mouse_pos = pygame.mouse.get_pos()
         self.display_surface.fill("white")
 
         lines = [
-            "Use the arrow keys to move around",
-            "and left click on the stands",
-            "to interact with them"
+            "CREDITS",
+            "Made by",
+            "Marie Iris Carole Victoire",
+            "Khushboo Bijlall",
+            "Rachel Jade Koo Koy Sing",
+            "Melissa Jing Yi Lew Kim Ping",
+            "Maria Sophie Lim Kee"
         ]
 
         y = 180
 
         for line in lines:
 
-            controls_text = self.get_font(25).render(line, True, "Black")
-            controls_rect = controls_text.get_rect(center=(400, y))
+            credits_text = self.get_font(25).render(line, True, "Black")
+            credits_rect = credits_text.get_rect(center=(400, y))
 
-            self.display_surface.blit(controls_text, controls_rect)
+            self.display_surface.blit(credits_text, credits_rect)
 
             y += 50
 
@@ -136,6 +147,101 @@ class Game:
                     self.state = 'menu'
 
         pygame.display.update()
+
+    def details(self):
+
+        mouse_pos = pygame.mouse.get_pos()
+
+        self.display_surface.fill((25, 25, 25))
+
+        # TITLE
+        title = self.get_font(40).render(
+            "PLAYER DETAILS",
+            True,
+            "white"
+        )
+
+        title_rect = title.get_rect(center=(400, 80))
+
+        self.display_surface.blit(title, title_rect)
+
+        # LEVEL
+        level_text = self.get_font(20).render(
+            f"Level: {self.player.level}",
+            True,
+            "white"
+        )
+
+        self.display_surface.blit(level_text, (80, 150))
+
+        # XP
+        xp_text = self.get_font(20).render(
+            f"XP: {self.player.total_points}",
+            True,
+            "white"
+        )
+
+        self.display_surface.blit(xp_text, (80, 200))
+
+        # NEXT LEVEL
+        next_level_xp = (self.player.level + 1) * 10
+
+        next_text = self.get_font(20).render(
+            f"Next Level: {next_level_xp} XP",
+            True,
+            "white"
+        )
+
+        self.display_surface.blit(next_text, (80, 250))
+
+        # SKILLS TITLE
+        skills_title = self.get_font(25).render(
+            "Skills",
+            True,
+            "white"
+        )
+
+        self.display_surface.blit(skills_title, (80, 330))
+
+        # SKILLS DISPLAY
+        y = 370
+
+        for skill, value in self.player.skills.items():
+
+            skill_text = self.get_font(20).render(
+                f"{skill}: {value}",
+                True,
+                "white"
+            )
+
+            self.display_surface.blit(skill_text, (100, y))
+
+            y += 30
+
+        # BACK BUTTON
+        back_button = Button(
+            image=self.button_image,
+            pos=(400, 540),
+            text_input="BACK",
+            font=self.get_font(28),
+            base_colour="black",
+            hovering_colour="#8b8b8b"
+        )
+
+        back_button.changeColor(mouse_pos)
+        back_button.update(self.display_surface)
+
+        # EVENTS
+        for event in pygame.event.get():
+
+            if event.type == pygame.QUIT:
+                self.running = False
+
+            if event.type == pygame.MOUSEBUTTONDOWN:
+
+                if back_button.checkForInput(mouse_pos):
+                    self.state = 'game'
+                    self.paused = True
 
     def career(self):
         # DRAW CAREER STANDS
@@ -177,9 +283,13 @@ class Game:
                 interaction_rect = stand_rect.inflate(20, 20)
 
                 if interaction_rect.colliderect(player_rect):
-
                     self.popup_active = True
+                    career["current_scenario"] = random.choice(career["scenarios"])
                     self.current_career = career
+
+                    # start timer
+                    self.question_start_time = pygame.time.get_ticks()
+
                     break
 
         # ----------------------------
@@ -226,85 +336,213 @@ class Game:
             title_rect = title.get_rect(center=(400, 140))
             self.display_surface.blit(title, title_rect)
 
-            # QUESTION
-            question = self.current_career["scenario"]["question"]
+            current_time = pygame.time.get_ticks()
+            elapsed = current_time - self.question_start_time
 
-            question_text = self.get_font(20).render(
-                question,
-                True,
-                "white"
-            )
+            # WAIT MESSAGE
+            if elapsed < self.question_delay:
 
-            self.display_surface.blit(question_text, (150, 190))
+                waiting_text = self.get_font(24).render(
+                    "Preparing scenario...",
+                    True,
+                    "white"
+                )
 
-            mouse_pos = pygame.mouse.get_pos()
+                waiting_rect = waiting_text.get_rect(center=(400, 250))
 
-            # CHOICES
-            choice1 = self.current_career["scenario"]["choices"][pygame.K_1][0]
-            choice2 = self.current_career["scenario"]["choices"][pygame.K_2][0]
+                self.display_surface.blit(waiting_text, waiting_rect)
 
-            choice1_button = Button(
-                image=self.button_image,
-                pos=(400, 260),
-                text_input=choice1,
-                font=self.get_font(10),
-                base_colour="black",
-                hovering_colour="#8b8b8b"
-            )
+            else:
 
-            choice2_button = Button(
-                image=self.button_image,
-                pos=(400, 340),
-                text_input=choice2,
+                # QUESTION
+                question = self.current_career["current_scenario"]["question"]
+
+                font = self.get_font(20)
+
+                words = question.split(' ')
+                lines = []
+                current_line = ""
+
+                max_width = 500
+
+                for word in words:
+
+                    test_line = current_line + word + " "
+
+                    text_width = font.size(test_line)[0]
+
+                    if text_width <= max_width:
+                        current_line = test_line
+                    else:
+                        lines.append(current_line)
+                        current_line = word + " "
+
+                lines.append(current_line)
+
+                y = 180
+
+                for line in lines:
+
+                    question_surface = font.render(
+                        line,
+                        True,
+                        "white"
+                    )
+
+                    question_rect = question_surface.get_rect(center=(400, y))
+
+                    self.display_surface.blit(
+                        question_surface,
+                        question_rect
+                    )
+
+                    y += 35
+
+                mouse_pos = pygame.mouse.get_pos()
+
+                # CHOICES
+                choice1 = self.current_career["current_scenario"]["choices"][pygame.K_1][0]
+                choice2 = self.current_career["current_scenario"]["choices"][pygame.K_2][0]
+
+                choice1_button = Button(
+                    image=self.button_image,
+                    pos=(400, 260),
+                    text_input=choice1,
+                    font=self.get_font(10),
+                    base_colour="black",
+                    hovering_colour="#8b8b8b"
+                )
+
+                choice2_button = Button(
+                    image=self.button_image,
+                    pos=(400, 340),
+                    text_input=choice2,
+                    font=self.get_font(10),
+                    base_colour="black",
+                    hovering_colour="#8b8b8b"
+                )
+
+                # DRAW BUTTONS
+                for button in [choice1_button, choice2_button]:
+
+                    button.changeColor(mouse_pos)
+                    button.update(self.display_surface)
+
+                        # BUTTON CLICKS
+                for event in pygame.event.get():
+
+                    if event.type == pygame.MOUSEBUTTONDOWN:
+
+                        selected_choice = None
+
+                        if choice1_button.checkForInput(mouse_pos):
+                            selected_choice = pygame.K_1
+
+                        elif choice2_button.checkForInput(mouse_pos):
+                            selected_choice = pygame.K_2
+
+                        if selected_choice and self.current_career:
+
+                            effects = self.current_career["current_scenario"]["choices"][selected_choice][1]
+                            self.player.update_level(effects)
+                            result_list = []
+
+                            for stat, value in effects.items():
+
+                                self.player.skills[stat] += value
+                                result_list.append(f"{stat} {'+' if value > 0 else ''}{value}")
+
+                                self.result_text = "   ".join(result_list)
+
+                                self.result_popup = True
+                                self.result_start_time = pygame.time.get_ticks()
+                                self.popup_active = False
+                                self.current_career = None
+
+    def pause_menu(self):
+
+        mouse_pos = pygame.mouse.get_pos()
+
+        # dark transparent overlay
+        overlay = pygame.Surface((WINDOW_WIDTH, WINDOW_HEIGHT))
+        overlay.set_alpha(180)
+        overlay.fill((0,0,0))
+
+        self.display_surface.blit(overlay, (0,0))
+
+        # title
+        pause_text = self.get_font(60).render(
+            "PAUSED",
+            True,
+            "white"
+        )
+
+        pause_rect = pause_text.get_rect(center=(400, 120))
+
+        self.display_surface.blit(pause_text, pause_rect)
+
+        # buttons
+        resume_button = Button(
+            image=self.button_image,
+            pos=(400, 250),
+            text_input="RESUME",
+            font=self.get_font(28),
+            base_colour="black",
+            hovering_colour="#8b8b8b"
+        )
+
+        details_button = Button(
+            image=self.button_image,
+            pos=(400, 330),
+            text_input="DETAILS",
+            font=self.get_font(30),
+            base_colour="black",
+            hovering_colour="#8b8b8b"
+        )
+
+        quit_button = Button(
+            image=self.button_image,
+            pos=(400, 470),
+            text_input="QUIT",
+            font=self.get_font(28),
+            base_colour="black",
+            hovering_colour="#8b8b8b"
+        )
+
+        for button in [resume_button, details_button, quit_button]:
+
+            button.changeColor(mouse_pos)
+            button.update(self.display_surface)
             
-                font=self.get_font(10),
-                base_colour="black",
-                hovering_colour="#8b8b8b"
-            )
+        # EVENTS
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                self.running = False
 
-            # DRAW BUTTONS
-            for button in [choice1_button, choice2_button]:
+            if event.type == pygame.KEYDOWN:
 
-                button.changeColor(mouse_pos)
-                button.update(self.display_surface)
+                # press SPACE again to resume
+                if event.key == pygame.K_SPACE:
+                    self.paused = False
 
-            # BUTTON CLICKS
-            if pygame.mouse.get_pressed()[0]:
+            if event.type == pygame.MOUSEBUTTONDOWN:
 
-                if choice1_button.checkForInput(mouse_pos):
+                if resume_button.checkForInput(mouse_pos):
+                    self.paused = False
 
-                    effects = self.current_career["scenario"]["choices"][pygame.K_1][1]
+                if details_button.checkForInput(mouse_pos):
+                    self.state = 'details'
 
-                    result_list = []
+                if details_button.checkForInput(mouse_pos):
 
-                    for stat, value in effects.items():
+                    skills = self.player.skills
 
-                        result_list.append(f"{stat} {'+' if value > 0 else ''}{value}")
-
-                    self.result_text = "   ".join(result_list)
-            
-                    self.result_popup = True
                     self.result_start_time = pygame.time.get_ticks()
 
-                    self.popup_active = False
-                    self.current_career = None
-                elif choice2_button.checkForInput(mouse_pos):
+                # QUIT
+                if quit_button.checkForInput(mouse_pos):
+                    self.running = False
 
-                    effects = self.current_career["scenario"]["choices"][pygame.K_2][1]
-
-                    result_list = []
-
-                    for stat, value in effects.items():
-
-                        result_list.append(f"{stat} {'+' if value > 0 else ''}{value}")
-
-                    self.result_text = "   ".join(result_list)
-
-                    self.result_popup = True
-                    self.result_start_time = pygame.time.get_ticks()
-
-                    self.popup_active = False
-                    self.current_career = None
     def menu(self):
         mouse_pos = pygame.mouse.get_pos()
         self.display_surface.blit(self.menu_bg, (0, 0))
@@ -313,10 +551,10 @@ class Game:
         self.display_surface.blit(title,title_rect)
         
         play_button = Button(image=self.button_image, pos=(400, 250), text_input="PLAY", font=self.get_font(30), base_colour="black", hovering_colour="#8b8b8b")
-        controls_button = Button(image=self.button_image, pos=(400, 400), text_input="CONTROLS", font=self.get_font(30), base_colour="black", hovering_colour="#8b8b8b")
+        credits_button = Button(image=self.button_image, pos=(400, 400), text_input="CREDITS", font=self.get_font(30), base_colour="black", hovering_colour="#8b8b8b")
         quit_button = Button(image=self.button_image, pos=(400, 550), text_input="QUIT", font=self.get_font(30), base_colour="black", hovering_colour="#8b8b8b")
 
-        for button in [play_button,controls_button,quit_button]:
+        for button in [play_button,credits_button,quit_button]:
             button.changeColor(mouse_pos)
             button.update(self.display_surface)
             
@@ -327,8 +565,8 @@ class Game:
             if event.type == pygame.MOUSEBUTTONDOWN:
                    if play_button.checkForInput(mouse_pos):
                        self.state = 'game'
-                   if controls_button.checkForInput(mouse_pos):
-                       self.state = 'controls'
+                   if credits_button.checkForInput(mouse_pos):
+                       self.state = 'credits'
                    if quit_button.checkForInput(mouse_pos):
                        self.running = False
 
@@ -407,22 +645,34 @@ class Game:
 
             if self.state == 'menu':
                 self.menu()
-            elif self.state == 'controls':
-                self.controls()
+            elif self.state == 'credits':
+                self.credits()
+            elif self.state == 'details':
+                self.details()
             elif self.state == 'game':
                 for event in pygame.event.get():
                     if event.type == pygame.QUIT:
                         self.running = False
                     if event.type == pygame.KEYDOWN:
+
                         if event.key == pygame.K_ESCAPE:
                             self.popup_active = False
-                #update
-                self.all_sprites.update(dt) 
 
-                # draw
+                        if event.key == pygame.K_SPACE:
+                            self.paused = True
+                # draw game normally
                 self.display_surface.blit(self.background, (0,0))
                 self.all_sprites.draw(self.display_surface)
-                self.career()
+
+                # ONLY update if not paused
+                if not self.paused:
+
+                    self.all_sprites.update(dt)
+                    self.career()
+
+                else:
+                    self.pause_menu()
+
                 self.show_result_popup()
             pygame.display.update()
         pygame.quit()
