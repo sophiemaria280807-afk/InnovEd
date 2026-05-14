@@ -23,6 +23,18 @@ class Player(pygame.sprite.Sprite):
         self.speed = 200
         self.collision_sprites = collision_sprites
 
+        #skills
+        self.skills = {
+            "knowledge": 0,
+            "creativity": 0,
+            "communication": 0,
+            "discipline": 0,
+            "problem_solving": 0
+        }
+                # player level
+        self.level = 0
+        self.total_points = 0
+
     def load_images(self):
         self.frames = {'Girl': []}
 
@@ -71,6 +83,24 @@ class Player(pygame.sprite.Sprite):
         frames = self.frames[self.state]
 
         self.image = frames[int(self.frame_index) % len(frames)]
+
+    def update_level(self, stat_changes):
+
+        for stat, value in stat_changes.items():
+
+            # update skill
+            self.skills[stat] += value
+
+            # update total points
+            self.total_points += value
+
+        # prevent negative points
+        if self.total_points < 0:
+            self.total_points = 0
+
+        # every 10 points = 1 level
+        self.level = self.total_points // 10
+
     def update(self,dt):
         self.input()
         self.move(dt)
